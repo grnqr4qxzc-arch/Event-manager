@@ -12,6 +12,7 @@ from decimal import Decimal
 
 import stripe
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 
 
 class RegisterView(APIView):
@@ -156,5 +157,47 @@ class ConfirmPaymentView(APIView):
             "booking_id": booking.id,
             "tickets": [t.code for t in booking.ticket_set.all()]
         }, status=200)
+
+
+
+
+
+class ValidateTicketView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        ticket_code = request.data.get("ticket_code")
+
+        if not ticket_code:
+            return Response(
+                {"error": "Ticket code is required"},
+                status=400
+            )
+
+        try:
+            ticket = Ticket.objects.get(code=ticket_code)
+        except Ticket.DoesNotExist:
+            return Response(
+                {"error": "Invalid ticket"},
+                status=404
+            )
+
+        if ticket.is_used:
+            return Response(
+                {"error": "Ticket already used"},
+                status=400
+            )
+
+        # Mark ticket as used
+        ticket.is_used = True
+        ticket.save()
+
+        return Response({
+            "message": "Ticket validated successfully",
+            "event": ticket.booking.event.title,
+            "user": ticket.booking.user.username
+        }, status=200)
+
+
 
 
