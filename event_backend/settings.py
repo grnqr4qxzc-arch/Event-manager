@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 
 
 
@@ -35,6 +43,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'events',
+    
 ]
 
 REST_FRAMEWORK = {
@@ -51,7 +61,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -143,3 +155,17 @@ STRIPE_SECRET_KEY = "sk_test_51SjGQh3QXHJnU7wcn5je853KJka6pgcR044KyNWnoPZ8F3Zyir
 STRIPE_PUBLIC_KEY = "pk_test_51SjGQh3QXHJnU7wc3b70iblJnQNZiLRQ1wP2on4jXb2IPj88gnIGd9Atwz1Htr4SmzMimnBh2ZDF4pDFHteXNfFk00jdFD5De5"
 STRIPE_SUCCESS_URL = "http://localhost:3000/payment-success"
 STRIPE_CANCEL_URL = "http://localhost:3000/payment-failed"
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+

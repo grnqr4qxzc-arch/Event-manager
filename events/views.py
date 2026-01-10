@@ -13,6 +13,7 @@ from decimal import Decimal
 import stripe
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class RegisterView(APIView):
@@ -78,8 +79,8 @@ class BookingCreateView(APIView):
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
 class CreateCheckoutSessionView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -197,7 +198,6 @@ class ValidateTicketView(APIView):
             "event": ticket.booking.event.title,
             "user": ticket.booking.user.username
         }, status=200)
-
 
 
 
