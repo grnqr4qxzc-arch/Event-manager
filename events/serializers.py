@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Event
 
+from .models import Booking,Ticket
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -32,3 +34,14 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = '__all__'
         read_only_fields = ['user', 'total_price']
+
+
+
+class MyTicketSerializer(serializers.ModelSerializer):
+    event = serializers.CharField(source='booking.event.title')
+    qr_image = serializers.ImageField()
+
+    class Meta:
+        model = Ticket
+        fields = ['code', 'event', 'qr_image', 'is_used']
+

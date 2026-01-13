@@ -6,7 +6,7 @@ from rest_framework import status
 from .serializers import RegisterSerializer
 from rest_framework import generics, permissions
 from .models import Event
-from .serializers import EventSerializer
+from .serializers import EventSerializer,MyTicketSerializer
 from .models import Ticket,Booking
 from decimal import Decimal
 
@@ -198,6 +198,15 @@ class ValidateTicketView(APIView):
             "event": ticket.booking.event.title,
             "user": ticket.booking.user.username
         }, status=200)
+    
 
 
+
+class MyTicketsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        tickets = Ticket.objects.filter(booking__user=request.user)
+        serializer = MyTicketSerializer(tickets, many=True)
+        return Response(serializer.data, status=200)
 
