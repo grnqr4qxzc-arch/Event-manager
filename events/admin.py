@@ -3,9 +3,41 @@ from .models import Event, Booking, Ticket
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'location', 'date', 'price', 'created_by', 'created_at')
-    list_filter = ('location', 'date')
+    list_display = (
+        'title',
+        'category',
+        'is_featured',
+        'location',
+        'date',
+        'price',
+        'created_by',
+        'created_at'
+    )
+
+    list_filter = (
+        'category',
+        'is_featured',
+        'location',
+        'date'
+    )
+
     search_fields = ('title', 'location')
+
+    list_editable = ('is_featured',)
+
+    fields = (
+        'title',
+        'category',
+        'description',
+        'image',
+        'is_featured',
+        'location',
+        'date',
+        'price',
+        'created_by'
+    )
+
+
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):

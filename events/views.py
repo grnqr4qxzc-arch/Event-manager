@@ -14,6 +14,7 @@ import stripe
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db.models import Q
 
 
 class RegisterView(APIView):
@@ -24,19 +25,45 @@ class RegisterView(APIView):
             return Response({"message": "User registered successfully"}, status=201)
         return Response(serializer.errors, status=400)
     
-    
-    
+class EventDetailView(generics.RetrieveAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
+    def get_serializer_context(self):
+        return {"request": self.request}
 
+    
 
 class EventListCreateView(generics.ListCreateAPIView):
-    queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_queryset(self):
+        queryset = Event.objects.all()
+
+        category = self.request.query_params.get("category")
+        search = self.request.query_params.get("search")
+        is_featured = self.request.query_params.get("is_featured")
+
+        if category:
+            queryset = queryset.filter(category=category)
+
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(location__icontains=search)
+            )
+
+        if is_featured == "true":
+            queryset = queryset.filter(is_featured=True)
+
+        return queryset
+
+    def get_serializer_context(self):
+        return {"request": self.request}
+
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
-
 
 
 
