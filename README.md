@@ -1,102 +1,99 @@
-🎬 Event & Movie Booking Backend (Django REST API)
+# 🎬 Event & Movie Booking Backend (Django REST API)
 
-This repository contains the backend API for a movie & event booking platform built using Django REST Framework.
-It supports role-based access for managers and users, movie & theatre management, show scheduling, and ticket booking.
+Backend API for a movie and event booking platform built using Django REST Framework.  
+Supports role-based access, movie & theatre management, show scheduling, and ticket booking.
 
-👉 Frontend repository:
-🔗 https://github.com/grnqr4qxzc-arch/<frontend-repo-name>
+## 🔗 Related Repository
+Frontend Application: https://github.com/grnqr4qxzc-arch/event-frontend
 
-🚀 Features
-👤 Authentication & Roles
+---
 
-JWT-based authentication
+## 🚀 Features
 
-Role-based access:
+### 👤 Authentication & Roles
+- JWT-based authentication (SimpleJWT)
+- Role-based access control:
+  - **Manager** – manage theatres, screens, movies, and shows
+  - **User** – browse movies, view shows, and book tickets
 
-Manager – manage theatres, screens, movies, shows
+---
 
-User – browse movies, view shows, book tickets
+### 🎥 Movies
+**Managers can:**
+- Add movies with images
+- Manage shows for their own theatres
 
-🎥 Movies
+**Public users can:**
+- View available movies
+- Browse showtimes across theatres
 
-Managers can:
+---
 
-Add movies with images
+### 🏢 Theatres & Screens
+**Managers can:**
+- Register theatres
+- Create multiple screens
+- Assign shows to specific screens
 
-Manage shows for their own theatres
+---
 
-Public users can:
+### 🕒 Shows
+Each show is associated with:
+- Movie
+- Screen
+- Scheduled time
 
-View movies
+---
 
-View showtimes across theatres
+## 🧱 Tech Stack
+- Backend: Django, Django REST Framework
+- Authentication: JWT (SimpleJWT)
+- Database: SQLite (development), PostgreSQL (production-ready)
+- Media Handling: Django media storage for image uploads
 
-🏢 Theatres & Screens
+---
 
-Managers can:
+## 🧠 Engineering Highlights
+- Enforced data ownership (managers can only manage their own data)
+- Prevented silent foreign-key data loss via serializer-level validation
+- Proper handling of media URLs using request context
+- Clean separation of public and manager-only APIs
 
-Register a theatre
+---
 
-Create multiple screens
+## ⚙️ Setup Instructions
 
-Assign shows to specific screens
+### Clone repository
+```bash
+git clone https://github.com/grnqr4qxzc-arch/Event-manager
 
-🕒 Shows
-
-Each show is linked to:
-
-Movie
-
-Screen
-
-🧱 Tech Stack
-
-Backend: Django, Django REST Framework
-
-Auth: JWT (SimpleJWT)
-
-Database: SQLite (dev) / PostgreSQL (prod-ready)
-
-Media: Django media storage for images
-
-🧠 Key Engineering Highlights
-
-Enforced data ownership (managers can only manage their own data)
-
-Prevented silent foreign-key data loss via serializer validation
-
-Proper handling of media URLs using request context
-
-Clean separation of public vs manager APIs
-
-⚙️ Setup Instructions
-
-# Clone repo
-git clone https://github.com/<your-username>/<backend-repo-name>
-cd event_backend
-
-# Create virtual environment
+Create virtual environment
 python -m venv venv
-venv\Scripts\activate  # Windows
+venv\Scripts\activate   # Windows
 
-# Install dependencies
+Install dependencies
 pip install -r requirements.txt
 
-# Run migrations
+Run migrations
 python manage.py migrate
 
-# Create superuser
+Create superuser
 python manage.py createsuperuser
 
-# Start server
+Start development server
 python manage.py runserver
 
-Admin Panel
+🛠 Admin Panel
 
-Access at: http://127.0.0.1:8000/admin
+Access at:
+http://127.0.0.1:8000/admin
 
-Used for debugging and validating DB integrity
+Used for:
 
-Theatre (via screen)
+Debugging
 
-Accurate ownership & data-integrity checks enforced
+Validating database integrity
+
+Verifying theatre, screen, and show ownership rules
+cd event_backend
+
