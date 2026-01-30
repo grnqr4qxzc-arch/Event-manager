@@ -95,5 +95,4 @@ Debugging
 Validating database integrity
 
 Verifying theatre, screen, and show ownership rules
-cd event_backend
 
